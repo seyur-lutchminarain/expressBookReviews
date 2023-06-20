@@ -39,6 +39,7 @@ async function getBooks() {
     throw error;
   }
 }
+
 // Get book details based on ISBN
 public_users.get("/isbn/:isbn", function (req, res) {
   //Write your code here
@@ -48,12 +49,16 @@ public_users.get("/isbn/:isbn", function (req, res) {
 
 // Async get books based on ISBN
 async function getBooksByIsbn(isbn) {
-  try {
-    const response = await axios.get(`http://localhost:8000/isbn/${isbn}`);
-    return response.data;
-  } catch (err) {
-    throw error;
-  }
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`http://localhost:8000/isbn/${isbn}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 }
 
 // Get book details based on author
